@@ -1,0 +1,58 @@
+<div class="container">
+
+    <h1>Crear Prestamo</h1>
+
+    <form>
+        <mat-form-field>
+            <mat-label>Identificador</mat-label>
+            <input type="text" matInput placeholder="Identificador" [(ngModel)]="loan.id" name="id" disabled>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Nombre del Cliente</mat-label>
+            <mat-select disableRipple [(ngModel)]="loan.client" name="client" required>
+                @for(client of clients; track client.id){
+                    <mat-option [value]="client">{{client.name}}</mat-option>
+                }
+            </mat-select>
+            <mat-error>El cliente no puede estar vacío</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Nombre del Juego</mat-label>
+            <mat-select disableRipple [(ngModel)]="loan.game" name="game" required>
+                @for(game of games; track game.id){
+                    <mat-option [value]="game">{{game.title}}></mat-option>
+                }
+            </mat-select>
+            <mat-error>El juego no puede estar vacío</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Fecha inicio</mat-label>
+            <input matInput [matDatepicker]="startDate" [(ngModel)]="loan.startDate" name="startDate" required>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate></mat-datepicker>
+            <mat-error>La fecha de inicio no puede estar vacía</mat-error>
+        </mat-form-field>
+        
+        <mat-form-field>
+            <mat-label>Fecha fin</mat-label>
+            <input matInput [matDatepicker]="endDate" [(ngModel)]="loan.endDate" name="endDate" required>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate></mat-datepicker>
+            <mat-error>La fecha de fin no puede estar vacía</mat-error>
+        </mat-form-field>
+        
+        
+
+
+        <div class="buttons">
+            <button mat-stroked-button (click)="onClose()">Cerrar</button>
+            <button mat-flat-button color="primary" (click)="onSave()">Guardar</button>
+        </div>
+
+    </form>
+</div>

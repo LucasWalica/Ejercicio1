@@ -1,0 +1,28 @@
+.header_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.header_title {
+    display: flex;
+    align-items: center;
+}
+
+.header_separator {
+    margin: 0 10px;
+}
+
+.header_menu {
+    display: flex;
+}
+
+.header_button {
+    margin: 0 10px;
+}
+
+.header_login {
+    display: flex;
+    align-items: center;
+}
