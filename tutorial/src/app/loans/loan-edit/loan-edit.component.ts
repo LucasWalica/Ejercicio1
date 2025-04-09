@@ -13,6 +13,7 @@ import { ClientService } from '../../clients/client.service';
 import { GameService } from '../../game/game.service';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import Swal from 'sweetalert2'
 @Component({
   selector: 'app-loan-edit',
   providers: [provideNativeDateAdapter()],
@@ -91,7 +92,11 @@ export class LoanEditComponent implements OnInit{
       this.diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       
       if (this.diffDays > this.maxDays) {
-        alert(`La diferencia entre las fechas no puede ser mayor a ${this.maxDays} días.`);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Los prestamos tienen un máximo de 14 días!",
+        });
         return;
       }
 
