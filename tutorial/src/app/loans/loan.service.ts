@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Loan } from './models/Loan.model';
-import { console } from 'node:inspector';
+import { LoanPage } from './models/LoanPage.model';
+import { Pageable } from './models/Pageable.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,10 +14,12 @@ export class LoanService {
   private baseUrl = "http://localhost:8080/loan";
 
 
+  getLoanPages(pageable:Pageable){
+    return this.http.post<LoanPage>(this.baseUrl, {pageable:pageable})
+  }
   getLoans(clientID?:number, gameID?:number, startDate?:Date, endDate?:Date){
     return this.http.get<Loan[]>(this.composeFindUrl(clientID, gameID, startDate, endDate))
   }
-  
   saveLoan(loan:Loan):Observable<void>{
     const {id} = loan;
     const url = id ? `${this.baseUrl}/${id}` : this.baseUrl;

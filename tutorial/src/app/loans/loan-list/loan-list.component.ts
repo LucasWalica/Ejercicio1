@@ -3,8 +3,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { LoanEditComponent } from '../loan-edit/loan-edit.component';
 import { LoanService } from '../loan.service';
 import { Loan } from '../models/Loan.model';
-import { CategoryService } from '../../category/category.service';
-import { Category } from '../../category/model/Category';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +19,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dialog-confirmation.component';
+import { Pageable } from '../models/Pageable.model';
+import { PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-loan-list',
@@ -35,6 +36,7 @@ import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dial
         MatInputModule,
         MatSelectModule,
         MatDatepickerModule,
+        MatPaginatorModule
   ],
   templateUrl: './loan-list.component.html',
   styleUrl: './loan-list.component.css'
@@ -53,6 +55,9 @@ export class LoanListComponent implements OnInit {
   filterClient: Client|null = {} as Client;
   filterStartDate: Date|null = {} as Date;
   filterEndDate: Date|null = {} as Date;
+  pageNumber: number = 0;
+  pageSize: number = 5;
+  totalElements: number = 0;
 
   constructor(
     private loanService:LoanService,
@@ -71,6 +76,7 @@ export class LoanListComponent implements OnInit {
 
     this.clientService.getClients().subscribe((clients) => (this.clients = clients));
     this.gameService.getGames().subscribe((games) => (this.games = games));
+    this.loadPage();
   }
 
 
@@ -130,4 +136,30 @@ export class LoanListComponent implements OnInit {
       }
     })
   }
+
+
+  loadPage(event?: PageEvent) {
+    const pageable: Pageable = {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sort: [
+            {
+                property: 'id',
+                direction: 'ASC',
+            },
+        ],
+    };
+
+    if (event != null) {
+        pageable.pageSize = event.pageSize;
+        pageable.pageNumber = event.pageIndex;
+    }
+
+    this.loanService.getLoanPages(pageable).subscribe((data) => {
+        this.dataSource.data = data.content;
+        this.pageNumber = data.pageable.pageNumber;
+        this.pageSize = data.pageable.pageSize;
+        this.totalElements = data.totalElements;
+    });
+}
 }
